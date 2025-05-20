@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, render_template_string
 import os
 import subprocess
+
+from flask import Flask, render_template, render_template_string, request
 
 app = Flask(__name__)
 
@@ -31,21 +32,37 @@ def render():
     debug_output = ""
     is_linux_command = False
 
-    # Analyze user input
-    if 'cat' in user_input or 'ls' in user_input or '/' in user_input:
-        debug_output += "⚠️ Detected Linux-style command. Remember this server runs on Windows.\n"
-        is_linux_command = True
+    # Blacklist check
+    blacklist = ['.config.', '.class.', '.request.', '.self.', '.global.', '.getitem.', '.base.', '.os.', '.mro.', '.import.', '.builtins.', '.popen.', '.read.', '.write.', '.system.', '.eval.', '.exec.', '.\\+.', '.\\..', '.\\[.', '.\\].',
+                 '.\\_.', '_config_', '_class_', '_request_', '_self_', '_global_', '_getitem_', '_base_', '_os_', '_mro_', '_import_', '_builtins_', '_popen_', '_read_', '_write_', '_system_', '_eval_', '_exec_', '_\\+_', '_\\__', '_\\[_', '_\\]_', '_\\__']
 
-    if '__import__' in user_input or 'os.' in user_input or 'popen' in user_input:
-        debug_output += "🔍 Int3resting attempt! You're exploring Python functions.\n"
+    for word in blacklist:
+        if word.lower() in user_input.lower():
+            return render_template_string('''
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Blocked</title>
+                <link rel="stylesheet" href="./static/style.css">
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Blacklist Detected</h1>
+                    <div class="result-box">
+                        🚫 Your input contains forbidden keywords.
+                    </div>
+                    <a href="/">Go Back</a>
+                </div>
+            </body>
+            </html>
+            ''')
+
+    # Analyze user input
+    
 
     if 'flag' in user_input.lower():
         debug_output += "🏴 You're looking for the flag! Getting warmer...\n"
 
-    # Windows-specific hints
-    if is_linux_command:
-        debug_output += "💡 Windows uses 'type' instead of 'cat', and 'dir' instead of 'ls'\n"
-        debug_output += "💡 Try using absolute paths with backslashes (C:\\path\\to\\file)\n"
 
     # First render the user input as a template
     try:
@@ -60,7 +77,7 @@ def render():
     <html>
     <head>
         <title>Your Result</title>
-        <link rel="stylesheet" href="/templates/globals.css">
+        <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
         <div class="container">
