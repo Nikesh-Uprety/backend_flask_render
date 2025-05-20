@@ -25,7 +25,7 @@ body {
 }
 
 .container::before {
-  content: "JINJA2 TEMPLATE ENGINE";
+  content: "EXPLOITABLE TEMPLATE ENGINE";
   position: absolute;
   top: 0;
   right: 0;
