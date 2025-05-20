@@ -81,7 +81,7 @@ def render():
     </head>
     <body>
         <div class="container">
-            <h1>Your Rendered Template</h1>
+            <h1>GREETINGS !</h1>
             <div class="result-box">
                 Hello, {{ rendered_input }}!
             </div>

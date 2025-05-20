@@ -25,7 +25,7 @@ body {
 }
 
 .container::before {
-  content: "EXPLOITABLE TEMPLATE ENGINE";
+  content: "WEB CTF CHALLENGE";
   position: absolute;
   top: 0;
   right: 0;
